@@ -1,32 +1,42 @@
-# Turborepo Svelte starter
+# HeyRepo
+> A CLI tool that uses AI agents to complete various tasks within a code 
+> repository.
 
-This is an official starter Turborepo.
+[![NPM](https://img.shields.io/npm/v/@heyrepo/cli.svg)](https://www.npmjs.com/package/@heyrepo/cli)
+[![Build Status](https://github.com/atinylittleshell/HeyRepo/actions/workflows/publish.yml/badge.svg)](https://github.com/atinylittleshell/HeyRepo/actions/workflows/publish.yml)
+<!-- [![codecov](https://codecov.io/gh/atinylittleshell/HeyRepo/graph/badge.svg?token=PLACEHOLDER)](https://codecov.io/gh/atinylittleshell/HeyRepo) -->
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/atinylittleshell/HeyRepo/blob/main/license)
 
-## Using this example
+<!-- long description -->
 
-Run the following command:
+<!-- ![screenshot](./doc/screenshot.png) -->
 
-```sh
-npx create-turbo@latest -e with-svelte
+## Prerequisites
+HeyRepo is based on Node.js. [Install Node.js](https://nodejs.org/en) before
+proceeding. Minimum required version is Node.js 16.
+
+## Usage
+<!-- usage examples -->
+
+Run it directly using npx:
+```bash
+npx heyrepo please help me increase test coverage of this codebase
 ```
 
-## What's inside?
+Alternatively, install aicmd globally:
+```bash
+npm i -g heyrepo
+```
 
-This Turborepo includes the following packages/apps:
+And then run it more easily each time:
+```bash
+heyrepo please help me increase test coverage of this codebase
+```
 
-### Apps and Packages
+## Contributing
 
-- `docs`: a [svelte-kit](https://kit.svelte.dev/) app
-- `web`: another [svelte-kit](https://kit.svelte.dev/) app
-- `ui`: a stub Svelte component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-plugin-svelte` and `eslint-config-prettier`)
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for more 
+info.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## Support me
+[Buy me a coffee](https://www.buymeacoffee.com/onelittleshell)

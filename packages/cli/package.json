@@ -1,0 +1,71 @@
+{
+  "name": "@heyrepo/cli",
+  "version": "0.0.1",
+  "description": "A CLI tool CLI tool that uses AI agents to complete various tasks within a code repository.",
+  "author": "atinylittleshell <shell@atinylittleshell.me>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atinylittleshell/HeyRepo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atinylittleshell/HeyRepo/issues"
+  },
+  "keywords": [
+    "openai",
+    "gpt",
+    "ai",
+    "agents",
+    "assistants",
+    "engineer",
+    "coding",
+    "repo",
+    "repository"
+  ],
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "heyrepo": "./dist/index.js"
+  },
+  "engineStrict": true,
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "dev": "npm run build && npm i -g .",
+    "build": "tsup",
+    "lint": "eslint . --ext .ts --max-warnings 0",
+    "lint:fix": "eslint . --ext .ts --max-warnings 0 --fix",
+    "test": "vitest run --coverage",
+    "changeset": "changeset",
+    "release": "pnpm build && changeset publish",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.2",
+    "@tsconfig/node16": "^16.1.0",
+    "@types/figlet": "^1.5.8",
+    "@types/node": "^20.8.7",
+    "@types/update-notifier": "^6.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "@vitest/coverage-v8": "^0.34.2",
+    "eslint-config-custom": "workspace:*",
+    "shx": "^0.3.4",
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.1"
+  },
+  "dependencies": {
+    "appdirsjs": "^1.2.7",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "figlet": "^1.7.0",
+    "update-notifier": "^7.0.0"
+  }
+}
