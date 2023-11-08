@@ -1,5 +1,5 @@
 {
-  "name": "@heyrepo/cli",
+  "name": "heyrepo-cli",
   "version": "0.0.1",
   "description": "A CLI tool CLI tool that uses AI agents to complete various tasks within a code repository.",
   "author": "atinylittleshell <shell@atinylittleshell.me>",
