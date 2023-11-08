@@ -1,0 +1,22 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "compilerOptions": {
+    "isolatedModules": true,
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
+    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "esnext",
+    "ignoreDeprecations": "5.0",
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "types": ["svelte"]
+  },
+  "include": ["index.ts", "./components/**/*"],
+  "exclude": ["node_modules/**/*"]
+}
