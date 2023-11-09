@@ -15,12 +15,7 @@ module.exports = {
     extraFileExtensions: ['.svelte'],
   },
   rules: {
-    'no-console': [
-      'error',
-      {
-        allow: ['warn', 'error'],
-      },
-    ],
+    'no-console': 'off',
     'simple-import-sort/imports': 'warn',
     '@typescript-eslint/no-unused-vars': [
       'error',

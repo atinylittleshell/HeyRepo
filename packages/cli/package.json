@@ -1,6 +1,6 @@
 {
   "name": "heyrepo-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A CLI tool CLI tool that uses AI agents to complete various tasks within a code repository.",
   "author": "atinylittleshell <shell@atinylittleshell.me>",
   "license": "MIT",
@@ -23,8 +23,6 @@
     "repository"
   ],
   "type": "module",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -62,10 +60,18 @@
     "vitest": "^0.34.1"
   },
   "dependencies": {
+    "@inquirer/prompts": "^3.3.0",
     "appdirsjs": "^1.2.7",
     "chalk": "^5.3.0",
+    "cli-spinners": "^2.9.1",
     "commander": "^11.1.0",
+    "dayjs": "^1.11.10",
     "figlet": "^1.7.0",
-    "update-notifier": "^7.0.0"
+    "function-gpt": "^2.0.0",
+    "ignore": "^5.2.4",
+    "openai": "^4.17.0",
+    "ora": "^7.0.1",
+    "update-notifier": "^7.0.0",
+    "winston": "^3.11.0"
   }
 }
