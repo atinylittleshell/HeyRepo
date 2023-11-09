@@ -13,6 +13,9 @@ class lsArgs {
   public dir!: string;
 }
 
+const EXPO_BACKOFF_INITIAL = 500;
+const EXPO_BACKOFF_MAX = 60000;
+
 export class RequestContext extends FunctionCallingProvider {
   public readonly client: ClientContext;
   public readonly repo: RepoContext;
@@ -63,6 +66,8 @@ export class RequestContext extends FunctionCallingProvider {
     let failed = false;
     const printedMessageIds = new Set<string>();
     let lastAssistantMessage = '';
+    let retryBackoff = EXPO_BACKOFF_INITIAL;
+    let lastStatus = 'queued';
 
     while (run.status !== 'completed' && !failed) {
       // the reason we make a closure here is that it's hard to type the input
@@ -120,13 +125,19 @@ export class RequestContext extends FunctionCallingProvider {
           break;
       }
 
-      // TODO: exponential backoff
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, retryBackoff));
 
       run = await this.client.openAiClient.beta.threads.runs.retrieve(
         thread.id,
         run.id,
       );
+
+      if (run.status === lastStatus) {
+        retryBackoff = Math.min(retryBackoff * 2, EXPO_BACKOFF_MAX);
+      } else {
+        retryBackoff = EXPO_BACKOFF_INITIAL;
+      }
+      lastStatus = run.status;
 
       const messages =
         await this.client.openAiClient.beta.threads.messages.list(thread.id);

@@ -1,2 +1,3 @@
 implement session management
 filter ls result by gitignore
+ls should filter out gitignored files

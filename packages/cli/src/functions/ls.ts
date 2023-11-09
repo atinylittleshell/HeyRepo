@@ -72,8 +72,6 @@ export async function ls(repoRoot: string, dir: string): Promise<lsOutput> {
     }
   }
 
-  // TODO: filter out gitignored files
-
   return {
     files,
     directories,
