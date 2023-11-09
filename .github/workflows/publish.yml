@@ -41,9 +41,9 @@ jobs:
       - name: publish to npm
         id: changesets
         uses: changesets/action@v1
-        working-directory: packages/cli
         with:
           publish: pnpm release
+          cwd: packages/cli
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
