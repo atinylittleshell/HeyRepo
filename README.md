@@ -4,7 +4,7 @@
 > repository.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/atinylittleshell/HeyRepo/blob/main/license)
-[![NPM](https://img.shields.io/npm/v/@heyrepo/cli.svg)](https://www.npmjs.com/package/@heyrepo/cli)
+[![NPM](https://img.shields.io/npm/v/heyrepo-cli.svg)](https://www.npmjs.com/package/heyrepo-cli)
 [![Build Status](https://github.com/atinylittleshell/HeyRepo/actions/workflows/publish.yml/badge.svg)](https://github.com/atinylittleshell/HeyRepo/actions/workflows/publish.yml)
 [![codecov](https://codecov.io/gh/atinylittleshell/HeyRepo/graph/badge.svg?token=6IZ7W3GZ1Z)](https://codecov.io/gh/atinylittleshell/HeyRepo)
 
