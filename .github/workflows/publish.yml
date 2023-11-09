@@ -41,6 +41,7 @@ jobs:
       - name: publish to npm
         id: changesets
         uses: changesets/action@v1
+        working-directory: packages/cli
         with:
           publish: pnpm release
         env:
