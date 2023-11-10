@@ -184,11 +184,15 @@ export class RequestContext extends FunctionCallingProvider {
             return;
           }
 
+          spinner.stop();
+
           ProgramContext.log(
             'info',
             `ASSISTANT: ${message.content.text.value}`,
           );
           console.log(chalk.blue(message.content.text.value));
+
+          spinner.start();
 
           printedMessages[message.id] = message.content.text.value;
         });
