@@ -1,2 +1,3 @@
 implement file read/write
 ls should filter out gitignored files
+ask user permission for writing files

@@ -4,14 +4,29 @@ import { FunctionCallingProvider, gptFunction, gptString } from 'function-gpt';
 import ora from 'ora';
 
 import { ClientContext } from './ClientContext.js';
-import { ls, lsOutput } from './functions/ls.js';
+import { ls, LsOutput } from './functions/ls.js';
+import { readFile, ReadFileOutput } from './functions/readFile.js';
+import { writeFile, WriteFileOutput } from './functions/writeFile.js';
 import { ProgramContext } from './ProgramContext.js';
 import { RepoContext } from './RepoContext.js';
 import { SessionContext } from './SessionContext.js';
 
-class lsArgs {
+class LsArgs {
   @gptString('current directory')
   public dir!: string;
+}
+
+class ReadFileArgs {
+  @gptString('path of the file to read')
+  public file!: string;
+}
+
+class WriteFileArgs {
+  @gptString('path of the file to write')
+  public file!: string;
+
+  @gptString('content to write to the file')
+  public content!: string;
 }
 
 const EXPO_BACKOFF_INITIAL = 500;
@@ -196,9 +211,19 @@ export class RequestContext extends FunctionCallingProvider {
 
   @gptFunction(
     'list files and directories directly in the current directory',
-    lsArgs,
+    LsArgs,
   )
-  public async ls(args: lsArgs): Promise<lsOutput> {
+  public async ls(args: LsArgs): Promise<LsOutput> {
     return await ls(this.repo.repoRoot, args.dir);
+  }
+
+  @gptFunction('read the content of a file', ReadFileArgs)
+  public async readFile(args: ReadFileArgs): Promise<ReadFileOutput> {
+    return await readFile(this.repo.repoRoot, args.file);
+  }
+
+  @gptFunction('read the content of a file', WriteFileArgs)
+  public async writeFile(args: WriteFileArgs): Promise<WriteFileOutput> {
+    return await writeFile(this.repo.repoRoot, args.file, args.content);
   }
 }

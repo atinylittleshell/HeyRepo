@@ -3,18 +3,18 @@ import path from 'path';
 
 import { ProgramContext } from '../ProgramContext.js';
 
-export type fsItem = {
+export type FsItem = {
   path: string;
   size: number;
 };
 
-export type lsOutput = {
+export type LsOutput = {
   error?: string;
-  files?: fsItem[];
-  directories?: fsItem[];
+  files?: FsItem[];
+  directories?: FsItem[];
 };
 
-export async function ls(repoRoot: string, dir: string): Promise<lsOutput> {
+export async function ls(repoRoot: string, dir: string): Promise<LsOutput> {
   if (!dir.startsWith('/')) {
     return {
       error: 'all directory paths must start with /',
@@ -41,8 +41,8 @@ export async function ls(repoRoot: string, dir: string): Promise<lsOutput> {
   }
 
   // list all files and directories in the current directory
-  const files: fsItem[] = [];
-  const directories: fsItem[] = [];
+  const files: FsItem[] = [];
+  const directories: FsItem[] = [];
 
   const dirItems = fs.readdirSync(absolutePath);
   for (const item of dirItems) {
