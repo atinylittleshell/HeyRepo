@@ -84,9 +84,6 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
-      '@types/istextorbinary':
-        specifier: ^2.3.4
-        version: 2.3.4
       '@types/node':
         specifier: ^20.8.7
         version: 20.8.7
@@ -925,12 +922,6 @@ packages:
 
   /@types/istanbul-lib-coverage@2.0.6:
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
-    dev: true
-
-  /@types/istextorbinary@2.3.4:
-    resolution: {integrity: sha512-NFRKClvbYQTxT+SYgx0aNk1qKLIjz/hkJUzW4NXdvL60jQxD8BnLBwcrkjuhRKziGfQvOKyIQ0kMBR7dp2ZInw==}
-    dependencies:
-      '@types/node': 20.9.0
     dev: true
 
   /@types/json-schema@7.0.11:

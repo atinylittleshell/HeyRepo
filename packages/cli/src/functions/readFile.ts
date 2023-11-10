@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { isTextSync } from 'istextorbinary';
+import * as istextorbinary from 'istextorbinary';
 import path from 'path';
 
 import { ProgramContext } from '../ProgramContext.js';
@@ -42,7 +42,7 @@ export async function readFile(
     const data = await fs.readFile(absolutePath);
 
     const fileName = path.basename(absolutePath);
-    if (isTextSync(fileName, data)) {
+    if (istextorbinary.isText(fileName, data)) {
       return {
         content: data.toString(),
       };
