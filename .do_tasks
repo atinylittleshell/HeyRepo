@@ -1,2 +1,2 @@
-filter ls result by gitignore
+implement file read/write
 ls should filter out gitignored files

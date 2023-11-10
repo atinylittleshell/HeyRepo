@@ -62,7 +62,7 @@ export async function ls(repoRoot: string, dir: string): Promise<lsOutput> {
     if (stats.isDirectory()) {
       directories.push({
         path: '/' + itemRelativePath.replaceAll(path.sep, '/'),
-        size: stats.size,
+        size: 0,
       });
     } else {
       files.push({
