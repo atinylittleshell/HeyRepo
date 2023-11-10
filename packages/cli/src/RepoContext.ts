@@ -63,13 +63,13 @@ export class RepoContext {
     }
 
     const history = client.getRepoHistory(this._repoRoot!);
-    if (history) {
+    if (history && history.oaiAssistantId) {
+      this._assistantId = history.oaiAssistantId;
+
       ProgramContext.log(
         'verbose',
-        'using last used assistant id for the repo',
+        `using last used assistant id ${this._assistantId}`,
       );
-
-      this._assistantId = history.oaiAssistantId || null;
     }
     if (!this._assistantId) {
       ProgramContext.log(

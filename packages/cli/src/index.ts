@@ -41,6 +41,11 @@ export const main = () => {
   program
     .version(packageJson.version)
     .option('-d --debug', 'output extra debugging information', false)
+    .option(
+      '-n --new',
+      'start a new session, clearing existing conversational context',
+      false,
+    )
     .argument('<prompts...>', 'Ask what you want')
     .action(
       async (_prompts: string[], options: Record<string, string | boolean>) => {
@@ -54,7 +59,11 @@ export const main = () => {
         );
 
         const request = new RequestContext();
-        await request.runAsync(process.cwd(), _prompts.join(' '));
+        await request.runAsync(
+          process.cwd(),
+          _prompts.join(' '),
+          options.new ? true : false,
+        );
       },
     );
 

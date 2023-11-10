@@ -7,6 +7,7 @@ import { ClientContext } from './ClientContext.js';
 import { ls, lsOutput } from './functions/ls.js';
 import { ProgramContext } from './ProgramContext.js';
 import { RepoContext } from './RepoContext.js';
+import { SessionContext } from './SessionContext.js';
 
 class lsArgs {
   @gptString('current directory')
@@ -19,53 +20,55 @@ const EXPO_BACKOFF_MAX = 60000;
 export class RequestContext extends FunctionCallingProvider {
   public readonly client: ClientContext;
   public readonly repo: RepoContext;
+  public readonly session: SessionContext;
 
   constructor() {
     super();
 
     this.client = new ClientContext();
     this.repo = new RepoContext();
+    this.session = new SessionContext();
   }
 
-  public async runAsync(workDirectory: string, prompt: string) {
+  public async runAsync(
+    workDirectory: string,
+    prompt: string,
+    newSession: boolean,
+  ) {
     await this.client.initializeAsync();
     await this.repo.initializeAsync(workDirectory, this.client);
+    await this.session.initializeAsync(this.client, this.repo, newSession);
 
     const spinner = ora({
-      text: 'Thinking...\n',
+      text: 'Thinking...',
       color: 'blue',
       spinner: cliSpinners.squareCorners,
-    }).start();
+    });
+    spinner.start();
 
-    const thread = await this.client.openAiClient.beta.threads.create();
-    await this.client.openAiClient.beta.threads.messages.create(thread.id, {
+    const threadId = this.session.threadId;
+    await this.client.openAiClient.beta.threads.messages.create(threadId, {
       role: 'user',
       content: prompt,
     });
 
-    ProgramContext.log(
-      'verbose',
-      `new thread created: ${JSON.stringify(thread)}`,
-    );
-
     let run = await this.client.openAiClient.beta.threads.runs.create(
-      thread.id,
+      threadId,
       {
         assistant_id: this.repo.assistantId,
       },
     );
 
-    ProgramContext.log('verbose', `new run created: ${JSON.stringify(thread)}`);
+    ProgramContext.log('verbose', `new run created: ${JSON.stringify(run)}`);
 
     this.client.recordRepoUsage(
       this.repo.repoRoot,
       this.repo.assistantId,
-      thread.id,
+      threadId,
     );
 
     let failed = false;
-    const printedMessageIds = new Set<string>();
-    let lastAssistantMessage = '';
+    const printedMessages: Record<string, string> = {};
     let retryBackoff = EXPO_BACKOFF_INITIAL;
     let lastStatus = 'queued';
 
@@ -92,6 +95,10 @@ export class RequestContext extends FunctionCallingProvider {
                 toolCall.function.name,
                 toolCall.function.arguments,
               );
+              ProgramContext.log(
+                'verbose',
+                `function call output: ${JSON.stringify(output)}`,
+              );
 
               return {
                 tool_call_id: toolCall.id,
@@ -102,7 +109,7 @@ export class RequestContext extends FunctionCallingProvider {
         );
 
         await this.client.openAiClient.beta.threads.runs.submitToolOutputs(
-          thread.id,
+          threadId,
           run.id,
           {
             tool_outputs: allOutputs,
@@ -128,7 +135,7 @@ export class RequestContext extends FunctionCallingProvider {
       await new Promise((resolve) => setTimeout(resolve, retryBackoff));
 
       run = await this.client.openAiClient.beta.threads.runs.retrieve(
-        thread.id,
+        threadId,
         run.id,
       );
 
@@ -140,48 +147,50 @@ export class RequestContext extends FunctionCallingProvider {
       lastStatus = run.status;
 
       const messages =
-        await this.client.openAiClient.beta.threads.messages.list(thread.id);
-      [...messages.data]
+        await this.client.openAiClient.beta.threads.messages.list(threadId);
+
+      [...messages.getPaginatedItems()]
         .sort((a, b) => {
           return a.created_at - b.created_at;
         })
+        .filter((message) => message.role === 'assistant')
+        .flatMap((message) =>
+          message.content.map((i) => ({
+            id: message.id,
+            content: i,
+          })),
+        )
         .forEach((message) => {
-          if (!printedMessageIds.has(message.id)) {
-            ProgramContext.log(
-              'info',
-              `${message.role}: ${JSON.stringify(message.content)}`,
-            );
-            printedMessageIds.add(message.id);
+          if (message.content.type !== 'text' || !message.content.text.value) {
+            return;
           }
 
-          if (message.role === 'assistant') {
-            message.content.forEach((i) => {
-              if (i.type === 'text') {
-                lastAssistantMessage = i.text.value;
-              }
-            });
+          if (printedMessages[message.id] === message.content.text.value) {
+            return;
           }
+
+          ProgramContext.log(
+            'info',
+            `ASSISTANT: ${message.content.text.value}`,
+          );
+          console.log(chalk.blue(message.content.text.value));
+
+          printedMessages[message.id] = message.content.text.value;
         });
     }
 
     spinner.stop();
 
     if (failed) {
-      if (lastAssistantMessage) {
-        console.log(chalk.red(lastAssistantMessage));
-      } else {
-        console.log(
-          chalk.red("Sorry I couldn't figure out how to help you with that."),
-        );
-      }
+      console.log(
+        chalk.red("Sorry I couldn't figure out how to help you with that."),
+      );
     } else {
-      if (lastAssistantMessage) {
-        console.log(lastAssistantMessage);
-      } else {
-        console.log(
+      console.log(
+        chalk.green(
           "Work done! I'm glad I could help you with that. Have a nice day!",
-        );
-      }
+        ),
+      );
     }
   }
 
