@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import istextorbinary from 'istextorbinary';
+import { isTextSync } from 'istextorbinary';
 import path from 'path';
 
 import { ProgramContext } from '../ProgramContext.js';
@@ -42,7 +42,7 @@ export async function readFile(
     const data = await fs.readFile(absolutePath);
 
     const fileName = path.basename(absolutePath);
-    if (istextorbinary.isTextSync(fileName, data)) {
+    if (isTextSync(fileName, data)) {
       return {
         content: data.toString(),
       };
@@ -53,7 +53,7 @@ export async function readFile(
       };
     }
   } catch (err) {
-    ProgramContext.log('error', `unable to read file: ${JSON.stringify(err)}}`);
+    ProgramContext.log('error', `unable to read file ${absolutePath}: ${err}`);
     return {
       error: 'unable to read file',
     };

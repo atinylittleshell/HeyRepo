@@ -38,10 +38,7 @@ export async function writeFile(
 
     return { success: true };
   } catch (err) {
-    ProgramContext.log(
-      'error',
-      `unable to write file: ${JSON.stringify(err)}}`,
-    );
+    ProgramContext.log('error', `unable to write file ${absolutePath}: ${err}`);
     return {
       error: 'unable to write file',
     };

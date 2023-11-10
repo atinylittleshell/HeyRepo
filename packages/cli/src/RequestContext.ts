@@ -217,12 +217,12 @@ export class RequestContext extends FunctionCallingProvider {
     return await ls(this.repo.repoRoot, args.dir);
   }
 
-  @gptFunction('read the content of a file', ReadFileArgs)
+  @gptFunction('read the content of a file in the repo', ReadFileArgs)
   public async readFile(args: ReadFileArgs): Promise<ReadFileOutput> {
     return await readFile(this.repo.repoRoot, args.file);
   }
 
-  @gptFunction('read the content of a file', WriteFileArgs)
+  @gptFunction('write to a file in the repo', WriteFileArgs)
   public async writeFile(args: WriteFileArgs): Promise<WriteFileOutput> {
     return await writeFile(this.repo.repoRoot, args.file, args.content);
   }

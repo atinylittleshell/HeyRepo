@@ -62,27 +62,43 @@ export class RepoContext {
       ProgramContext.log('verbose', `found .git at ${this._repoRoot}}`);
     }
 
+    const dummyRequestContext = new RequestContext();
+    const functionSchema = dummyRequestContext.getSchema();
+    if (!functionSchema) {
+      ProgramContext.log('error', 'unexpected null function schema');
+      throw new Error('unexpected null function schema');
+    }
+
     const history = client.getRepoHistory(this._repoRoot!);
     if (history && history.oaiAssistantId) {
       this._assistantId = history.oaiAssistantId;
 
       ProgramContext.log(
         'verbose',
-        `using last used assistant id ${this._assistantId}`,
+        `using last used assistant id ${this._assistantId}, updating function schema`,
+      );
+
+      await this._client.openAiClient.beta.assistants.update(
+        this._assistantId,
+        {
+          tools: functionSchema.map((f) => ({
+            type: 'function',
+            function: f,
+          })),
+        },
       );
     }
+
     if (!this._assistantId) {
       ProgramContext.log(
         'verbose',
         'no used assistant id found for this repo, creating new one',
       );
 
-      const dummyRequestContext = new RequestContext();
-      const functionSchema = dummyRequestContext.getSchema();
-      if (!functionSchema) {
-        ProgramContext.log('error', 'unexpected null function schema');
-        throw new Error('unexpected null function schema');
-      }
+      ProgramContext.log(
+        'verbose',
+        `function schema: ${JSON.stringify(functionSchema)}`,
+      );
 
       const assistant = await this._client.openAiClient.beta.assistants.create({
         name: 'HeyRepo',
