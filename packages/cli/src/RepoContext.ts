@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { ClientContext } from './ClientContext.js';
+import { ASSISTANT_INSTRUCTIONS } from './constants.js';
 import { ProgramContext } from './ProgramContext.js';
 import { RequestContext } from './RequestContext.js';
 
@@ -81,6 +82,7 @@ export class RepoContext {
       await this._client.openAiClient.beta.assistants.update(
         this._assistantId,
         {
+          instructions: ASSISTANT_INSTRUCTIONS,
           tools: functionSchema.map((f) => ({
             type: 'function',
             function: f,
@@ -102,8 +104,7 @@ export class RepoContext {
 
       const assistant = await this._client.openAiClient.beta.assistants.create({
         name: 'HeyRepo',
-        instructions:
-          'You are a CLI tool for doing tasks in a code repository using the functions given to you. The repo is mounted at the root "/" directory.',
+        instructions: ASSISTANT_INSTRUCTIONS,
         tools: functionSchema.map((f) => ({
           type: 'function',
           function: f,
