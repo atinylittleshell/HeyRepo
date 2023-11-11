@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import cliSpinners from 'cli-spinners';
 import { FunctionCallingProvider, gptFunction, gptString } from 'function-gpt';
 import ora from 'ora';
@@ -10,6 +9,7 @@ import { writeFile, WriteFileOutput } from './functions/writeFile.js';
 import { ProgramContext } from './ProgramContext.js';
 import { RepoContext } from './RepoContext.js';
 import { SessionContext } from './SessionContext.js';
+import { print } from './utils.js';
 
 class LsArgs {
   @gptString('current directory')
@@ -54,12 +54,7 @@ export class RequestContext extends FunctionCallingProvider {
     await this.repo.initializeAsync(workDirectory, this.client);
     await this.session.initializeAsync(this.client, this.repo, newSession);
 
-    const spinner = ora({
-      text: 'Thinking...',
-      color: 'blue',
-      spinner: cliSpinners.squareCorners,
-    });
-    spinner.start();
+    ProgramContext.instance.spinner.start();
 
     const threadId = this.session.threadId;
     await this.client.openAiClient.beta.threads.messages.create(threadId, {
@@ -184,32 +179,20 @@ export class RequestContext extends FunctionCallingProvider {
             return;
           }
 
-          spinner.stop();
-
           ProgramContext.log(
             'info',
             `ASSISTANT: ${message.content.text.value}`,
           );
-          console.log(chalk.blue(message.content.text.value));
-
-          spinner.start();
+          print('chat', message.content.text.value);
 
           printedMessages[message.id] = message.content.text.value;
         });
     }
 
-    spinner.stop();
+    ProgramContext.instance.spinner.stop();
 
     if (failed) {
-      console.log(
-        chalk.red("Sorry I couldn't figure out how to help you with that."),
-      );
-    } else {
-      console.log(
-        chalk.green(
-          "Work done! I'm glad I could help you with that. Have a nice day!",
-        ),
-      );
+      print('error', "Sorry I couldn't figure out how to help you with that.");
     }
   }
 

@@ -1,11 +1,11 @@
 import { input } from '@inquirer/prompts';
 import appDirs from 'appdirsjs';
-import chalk from 'chalk';
 import fs, { mkdirSync } from 'fs';
 import { OpenAI } from 'openai';
 import path from 'path';
 
 import { ProgramContext } from './ProgramContext.js';
+import { print } from './utils.js';
 
 export type ClientRepoHistory = {
   lastRequestTimestamp: number;
@@ -102,10 +102,9 @@ export class ClientContext {
   }
 
   private async askForOpenAiKeyAsync(): Promise<string> {
-    console.log(
-      chalk.yellow(
-        "Hello there! Looks like I'm helping you for the first time. I use OpenAI behind the scenes and will need an OpenAI API key to work. This key will be stored on your local machine only.",
-      ),
+    print(
+      'chat',
+      "Hello there! Looks like I'm helping you for the first time. I use OpenAI behind the scenes and will need an OpenAI API key to work. This key will be stored on your local machine only.",
     );
 
     const key = await input({

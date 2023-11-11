@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 
 import { ProgramContext } from '../ProgramContext.js';
+import { print } from '../utils.js';
 
 export type WriteFileOutput = {
   success?: boolean;
@@ -13,6 +14,8 @@ export async function writeFile(
   file: string,
   content: string,
 ): Promise<WriteFileOutput> {
+  print('process', `writing file ${file}...`);
+
   if (!file.startsWith('/')) {
     return {
       error: 'all file paths must start with /',

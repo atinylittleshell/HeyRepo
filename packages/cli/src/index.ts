@@ -1,6 +1,4 @@
-import chalk from 'chalk';
 import { Command } from 'commander';
-import figlet from 'figlet';
 import { readFileSync } from 'fs';
 import path from 'path';
 import updateNofier from 'update-notifier';
@@ -18,22 +16,6 @@ const packageJson = JSON.parse(
     'utf-8',
   ),
 );
-
-export const printAsciiArtAsync = (text: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    figlet(text, (err, data) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      if (data) {
-        console.log(chalk.yellow(data));
-        resolve();
-      }
-    });
-  });
-};
 
 export const main = () => {
   const program = new Command();

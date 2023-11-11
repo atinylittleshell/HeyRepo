@@ -3,6 +3,7 @@ import * as istextorbinary from 'istextorbinary';
 import path from 'path';
 
 import { ProgramContext } from '../ProgramContext.js';
+import { print } from '../utils.js';
 
 export type ReadFileOutput = {
   error?: string;
@@ -13,6 +14,8 @@ export async function readFile(
   repoRoot: string,
   file: string,
 ): Promise<ReadFileOutput> {
+  print('process', `reading file ${file}...`);
+
   if (!file.startsWith('/')) {
     return {
       error: 'all file paths must start with /',

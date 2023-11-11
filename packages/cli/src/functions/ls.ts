@@ -1,7 +1,9 @@
+import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 
 import { ProgramContext } from '../ProgramContext.js';
+import { print } from '../utils.js';
 
 export type FsItem = {
   path: string;
@@ -15,6 +17,8 @@ export type LsOutput = {
 };
 
 export async function ls(repoRoot: string, dir: string): Promise<LsOutput> {
+  print('process', `listing files and directories in ${dir}...`);
+
   if (!dir.startsWith('/')) {
     return {
       error: 'all directory paths must start with /',
