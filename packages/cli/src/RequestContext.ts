@@ -1,6 +1,4 @@
-import cliSpinners from 'cli-spinners';
 import { FunctionCallingProvider, gptFunction, gptString } from 'function-gpt';
-import ora from 'ora';
 
 import { ClientContext } from './ClientContext.js';
 import { ls, LsOutput } from './functions/ls.js';
