@@ -1,3 +1,4 @@
 ls should filter out gitignored files
 ask user permission for writing files
 move printedMessages to session context
+experiment with planning thoughts
